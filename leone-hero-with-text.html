@@ -144,66 +144,106 @@
             transition: transform 0.1s ease-out;
         }
 
-        /* Responsive per sfere */
+        /* Responsive per sfere - MIGLIORATO PER MOBILE */
         @media (max-width: 768px) {
             .sphere {
-                width: 60px;
-                height: 60px;
+                width: 100px;  /* Aumentato da 80px */
+                height: 100px; /* Aumentato da 80px */
+                border-width: 4px; /* Bordo più spesso per visibilità */
             }
 
             .sphere[data-element="sphere1"] {
-                top: 40px;
-                left: 140px;
+                top: 120px;  /* Posizioni ottimizzate per mobile */
+                left: 50px;
             }
 
             .sphere[data-element="sphere2"] {
                 top: 100px;
-                left: 100px;
-            }
-
-            .sphere[data-element="sphere3"] {
-                top: 100px;
-                left: 180px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .sphere {
-                width: 50px;
-                height: 50px;
-            }
-
-            .sphere[data-element="sphere1"] {
-                top: 30px;
                 left: 120px;
             }
 
-            .sphere[data-element="sphere2"] {
-                top: 80px;
-                left: 80px;
-            }
-
             .sphere[data-element="sphere3"] {
-                top: 80px;
-                left: 160px;
+                top: 100px;
+                left: 200px;
             }
         }
 
-        /* Responsive per LMS Head SVG */
+        @media (max-width: 480px) {
+            .sphere {
+                width: 120px;  /* Ancora più grandi su mobile piccolo */
+                height: 120px;
+                border-width: 5px;
+            }
+
+            .sphere[data-element="sphere1"] {
+                top: 140px;
+                left: 30px;
+            }
+
+            .sphere[data-element="sphere2"] {
+                top: 120px;
+                left: 130px;
+            }
+
+            .sphere[data-element="sphere3"] {
+                top: 280px;  /* Spostata più in basso per evitare sovrapposizioni */
+                left: 80px;
+            }
+        }
+
+        /* Responsive per LMS Head SVG - MIGLIORATO */
         @media (max-width: 768px) {
             #leone-hero-fullscreen .lms-head-svg {
-                width: 220px;
-                height: 220px;
-                top: 8%;
-                right: 5%;
+                width: 280px;  /* Aumentato da 220px */
+                height: 280px;
+                top: 300px;    /* Posizionato meglio */
+                left: 50%;
+                transform: translateX(-50%);
             }
         }
 
         @media (max-width: 480px) {
             #leone-hero-fullscreen .lms-head-svg {
-                width: 150px;
-                height: 150px;
-                opacity: 0.8;
+                width: 200px;  /* Aumentato da 150px */
+                height: 200px;
+                top: 400px;    /* Più spazio dalle sfere */
+                opacity: 0.9;  /* Più visibile */
+            }
+        }
+
+        /* CTA Button responsive - MIGLIORATO */
+        @media (max-width: 768px) {
+            .cta-button {
+                padding: 18px 35px;
+                font-size: 16px;
+                top: 60%;  /* Spostato più in basso */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cta-button {
+                padding: 16px 30px;
+                font-size: 15px;
+                top: 65%;  /* Ancora più in basso per evitare sovrapposizioni */
+            }
+        }
+
+        /* Reset button responsive */
+        @media (max-width: 768px) {
+            .reset-button {
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .reset-button {
+                top: 15px;
+                right: 15px;
+                padding: 10px 16px;
+                font-size: 13px;
             }
         }
 
@@ -312,14 +352,6 @@
 
         /* Controlli responsive */
         @media (max-width: 768px) {
-            .cta-button {
-                bottom: 80px;
-                padding: 14px 28px;
-                font-size: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
             .controls {
                 bottom: 20px;
                 right: 20px;
@@ -329,10 +361,16 @@
                 padding: 10px 12px;
                 font-size: 16px;
             }
+        }
 
-            .cta-button {
-                bottom: 100px;
-                padding: 12px 24px;
+        @media (max-width: 480px) {
+            .controls {
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .reset-btn {
+                padding: 8px 10px;
                 font-size: 14px;
             }
         }
