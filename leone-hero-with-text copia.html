@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leone Master School - Hero con Testo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+        }
+
+        #leone-hero-fullscreen {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2a3f5f 75%, #1e3c72 100%);
+            overflow: hidden;
+            cursor: grab;
+        }
+
+        #leone-hero-fullscreen:active {
+            cursor: grabbing;
+        }
+
+        /* Sfere draggabili */
+        .sphere {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2a3f5f 75%, #1e3c72 100%);
+            box-shadow: 0 8px 32px rgba(30, 60, 114, 0.3), 
+                        inset 0 2px 8px rgba(255, 255, 255, 0.1);
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            z-index: 10;
+        }
+
+        .sphere:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(30, 60, 114, 0.4), 
+                        inset 0 2px 8px rgba(255, 255, 255, 0.15);
+        }
+
+        .sphere:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+
+        /* Posizioni iniziali delle sfere - usando data-element per essere più specifici */
+        #leone-hero-fullscreen .sphere[data-element="sphere1"] {
+            top: 104px;
+            left: 103px;
+        }
+
+        #leone-hero-fullscreen .sphere[data-element="sphere2"] {
+            top: 108px;
+            left: 227px;
+        }
+
+        #leone-hero-fullscreen .sphere[data-element="sphere3"] {
+            top: 18px;
+            left: 168px;
+        }
+
+        /* LMS Head SVG */
+        #leone-hero-fullscreen .lms-head-svg {
+            position: absolute;
+            top: 200px;
+            left: 50px;
+            width: 300px;
+            height: 300px;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.2s ease;
+            z-index: 5;
+            filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.4));
+        }
+
+        .lms-head-svg:hover {
+            transform: scale(1.02);
+        }
+
+        .lms-head-svg:active {
+            cursor: grabbing;
+            transform: scale(0.98);
+        }
+
+        /* Controlli */
+        .controls {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            z-index: 20;
+        }
+
+        .reset-btn {
+            background: rgba(30, 60, 114, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .reset-btn:hover {
+            background: rgba(30, 60, 114, 1);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        /* Large Background Text */
+        .large-text {
+            position: fixed;
+            bottom: -30px;
+            left: -80px;
+            font-size: clamp(200px, 60vw, 500px);
+            font-weight: 700;
+            font-style: italic;
+            color: rgba(255, 255, 255, 1);
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: -0.02em;
+            line-height: 0.9;
+            pointer-events: none;
+            z-index: 1;
+            white-space: nowrap;
+            transform: translateX(0px);
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Responsive per sfere */
+        @media (max-width: 768px) {
+            .sphere {
+                width: 60px;
+                height: 60px;
+            }
+
+            .sphere[data-element="sphere1"] {
+                top: 40px;
+                left: 140px;
+            }
+
+            .sphere[data-element="sphere2"] {
+                top: 100px;
+                left: 100px;
+            }
+
+            .sphere[data-element="sphere3"] {
+                top: 100px;
+                left: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sphere {
+                width: 50px;
+                height: 50px;
+            }
+
+            .sphere[data-element="sphere1"] {
+                top: 30px;
+                left: 120px;
+            }
+
+            .sphere[data-element="sphere2"] {
+                top: 80px;
+                left: 80px;
+            }
+
+            .sphere[data-element="sphere3"] {
+                top: 80px;
+                left: 160px;
+            }
+        }
+
+        /* Responsive per LMS Head SVG */
+        @media (max-width: 768px) {
+            #leone-hero-fullscreen .lms-head-svg {
+                width: 220px;
+                height: 220px;
+                top: 8%;
+                right: 5%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #leone-hero-fullscreen .lms-head-svg {
+                width: 150px;
+                height: 150px;
+                opacity: 0.8;
+            }
+        }
+
+        /* Responsive per large text */
+        @media (max-width: 768px) {
+            .large-text {
+                font-size: clamp(80px, 12vw, 200px);
+                bottom: -15px;
+                left: -30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .large-text {
+                font-size: clamp(60px, 10vw, 150px);
+                bottom: -10px;
+                left: -20px;
+            }
+        }
+
+        /* CTA Button */
+        .cta-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            color: #0f1419;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            z-index: 20;
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translate(-50%, -50%) translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button:active {
+            transform: translate(-50%, -50%) translateY(0px);
+        }
+
+        /* Controlli responsive */
+        @media (max-width: 768px) {
+            .cta-button {
+                bottom: 80px;
+                padding: 14px 28px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .controls {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .reset-btn {
+                padding: 10px 12px;
+                font-size: 16px;
+            }
+
+            .cta-button {
+                bottom: 100px;
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div id="leone-hero-fullscreen">
+    <!-- Large Background Text -->
+    <div class="large-text" id="largeText">
+        Leone Master School
+    </div>
+
+    <!-- Sfere draggabili -->
+    <div class="sphere" data-element="sphere1"></div>
+    <div class="sphere" data-element="sphere2"></div>
+    <div class="sphere" data-element="sphere3"></div>
+
+    <!-- LMS Head SVG -->
+    <div class="lms-head-svg" data-element="lms-head">
+        <svg viewBox="0 0 180 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="lmsGradientFullscreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#0f1419;stop-opacity:1" />
+                    <stop offset="25%" style="stop-color:#1a2332;stop-opacity:1" />
+                    <stop offset="75%" style="stop-color:#2a3f5f;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#1e3c72;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            
+            <!-- Testa principale (parte superiore) -->
+            <path class="cls-1" d="M11.94,25.15l19.18,3.13v-2.56c-10.09-2.42-20.32-4.12-31.12-3.41V0c3.69.43,7.25,1.14,10.8,1.99,6.11,1.71,12.22,3.69,18.19,6.11,20.04,8.1,36.09,21.74,50.16,37.94,2.84,3.27,5.54,6.82,8.53,10.37.99-1.28,1.85-2.56,2.84-3.69,11.79-15.63,26.43-28.7,43.2-38.79,11.08-6.68,23.02-10.23,35.52-13.07,1.28-.43,2.7-.57,3.98-.85.57,0,1.56.71,1.56,1.14.14,6.82,0,13.78,0,20.89-9.8-.28-19.32-.28-28.7,2.56,0,1.14-.28,2.13.43,2.84.28.28.71.28,1.14.28,4.55-.99,9.09-2.13,13.78-2.84.71-.14,2.13.85,2.27,1.42.14,4.4.14,8.95.14,13.64h-13.36c.99,3.27,1.85,6.25,2.84,9.66.14,1.42.28,2.42.43,3.41-.14,4.55-.14,9.09,1.71,13.36s3.41,8.53,5.12,12.79c.71,2.27-.43,4.69-2.7,5.54-.14,0-.43.14-.57.14-1.42.14-2.98,0-4.83,0,.28,1.28.57,2.42.99,3.69q1.99,4.83-1.99,7.96c0,.85.14,1.56.43,2.27,1.28,2.13.57,3.69-1.14,5.26-1.42.99-1.85,2.84-.99,4.26,3.98,6.68,1.71,11.08-5.12,15.06-.43.14-.71.28-.99.57-6.82,2.27-13.93,1.99-21.31,1.99-.43.71-.57,1.56-.57,2.42-.14,5.97-.28,12.08-.28,18.05,0,1.85-.57,2.27-2.27,2.27-14.92-.14-29.7-.28-44.62-.43-1.28,0-2.42-.28-4.12-.43h-.99c-5.12-1.14-10.23-2.42-15.63-3.69-.99-.28-1.56-.57-2.27-.71-.99-.71-1.85-1.56-2.56-2.42,0-.99-.14-1.56-.14-2.13,0-3.13,0-6.25.14-9.8,0-.57,0-1.14-.14-1.71,0-3.41.57-6.96,0-10.23-.99-5.54-2.42-11.08-4.26-16.48-.99-1.99-2.7-3.69-4.69-4.69-3.69-1.99-6.82-4.97-8.81-8.81-.71-1.14-1.56-2.27-2.56-3.13-2.98-2.56-3.98-5.83-4.83-9.38-1.14-4.55.14-8.95.14-13.36,0-1.99,1.42-3.98,1.85-5.97.57-2.13.71-4.55.43-6.82-.43-2.13,0-4.26,1.14-6.11.43-.71,1.85-1.56,0-1.56l-.99-.14h-1.14l-13.78-.57c0-3.55,0-7.39-.14-11.37.28-1.28.43-2.42.71-3.55Z" 
+                  fill="url(#lmsGradientFullscreen)" stroke="none"/>
+
+        </svg>
+    </div>
+
+    <!-- CTA Button -->
+    <a href="https://app.leonemasterschool.it/author/pageseditor?page=i-tuoi-corsi&type=courses" class="cta-button" target="_blank">
+        Vai ai tuoi corsi
+    </a>
+
+    <!-- Controlli discreti -->
+    <div class="controls">
+        <button class="reset-btn" onclick="resetLeoneHeroSpheres()" title="Ripristina posizioni sfere">↻</button>
+    </div>
+</div>
+
+
+
+<script>
+    let isDragging = false;
+    let currentElement = null;
+    let startX, startY, startLeft, startTop;
+
+    // Funzione per iniziare il drag
+    function startDrag(e) {
+        isDragging = true;
+        currentElement = e.target.closest('[data-element]');
+        
+        if (!currentElement) return;
+        
+        const rect = currentElement.getBoundingClientRect();
+        const clientX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+        const clientY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+        
+        startX = clientX - rect.left;
+        startY = clientY - rect.top;
+        startLeft = rect.left;
+        startTop = rect.top;
+        
+        currentElement.style.position = 'absolute';
+        currentElement.style.zIndex = '1000';
+        
+        e.preventDefault();
+    }
+
+    // Funzione per il drag
+    function drag(e) {
+        if (!isDragging || !currentElement) return;
+        
+        const clientX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+        const clientY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+        
+        const container = document.getElementById('leone-hero-fullscreen');
+        const containerRect = container.getBoundingClientRect();
+        
+        let newLeft = clientX - startX;
+        let newTop = clientY - startY;
+        
+        // Limiti del container
+        const elementRect = currentElement.getBoundingClientRect();
+        newLeft = Math.max(0, Math.min(newLeft, containerRect.width - elementRect.width));
+        newTop = Math.max(0, Math.min(newTop, containerRect.height - elementRect.height));
+        
+        currentElement.style.left = newLeft + 'px';
+        currentElement.style.top = newTop + 'px';
+        
+        e.preventDefault();
+    }
+
+    // Funzione per terminare il drag
+    function endDrag() {
+        if (currentElement) {
+            currentElement.style.zIndex = currentElement.dataset.element === 'lms-head' ? '5' : '10';
+        }
+        isDragging = false;
+        currentElement = null;
+    }
+
+    // Event listeners per mouse
+    document.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', endDrag);
+
+    // Event listeners per touch (mobile)
+    document.addEventListener('touchstart', startDrag, { passive: false });
+    document.addEventListener('touchmove', drag, { passive: false });
+    document.addEventListener('touchend', endDrag);
+
+    // Funzione per resettare le posizioni
+    function resetLeoneHeroSpheres() {
+        const spheres = document.querySelectorAll('.sphere');
+        const lmsHead = document.querySelector('.lms-head-svg');
+        
+        // Reset sfere
+        spheres.forEach(sphere => {
+            sphere.style.top = '';
+            sphere.style.left = '';
+            sphere.style.zIndex = '10';
+        });
+        
+        // Reset LMS head
+        if (lmsHead) {
+            lmsHead.style.top = '200px';
+            lmsHead.style.left = '40px';
+            lmsHead.style.right = 'auto';
+            lmsHead.style.zIndex = '5';
+        }
+    }
+
+    // Animazione del testo durante lo scroll
+    let ticking = false;
+
+    function updateTextPosition() {
+        const scrollY = window.pageYOffset;
+        const largeText = document.getElementById('largeText');
+        
+        // Movimento verso destra basato sullo scroll (più lento)
+        const moveX = scrollY * 0.15; // Ridotto per un movimento più sottile
+        
+        largeText.style.transform = `translateX(${moveX}px)`;
+        
+        ticking = false;
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(updateTextPosition);
+            ticking = true;
+        }
+    }
+
+    // Event listener per lo scroll
+    window.addEventListener('scroll', requestTick);
+
+    // Prevenzione del drag del testo
+    document.addEventListener('selectstart', function(e) {
+        if (isDragging) {
+            e.preventDefault();
+        }
+    });
+
+    // Inizializzazione
+    document.addEventListener('DOMContentLoaded', function() {
+        // Assicurati che tutti gli elementi draggabili abbiano la posizione assoluta
+        const draggableElements = document.querySelectorAll('[data-element]');
+        draggableElements.forEach(element => {
+            if (element.style.position !== 'absolute') {
+                element.style.position = 'absolute';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

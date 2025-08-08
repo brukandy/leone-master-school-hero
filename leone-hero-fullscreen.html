@@ -1,0 +1,529 @@
+<!-- Leone Master School - Hero Section Fullscreen con Sfere Interattive -->
+<!-- Componente per occupare tutta la hero section come sfondo -->
+
+<div id="leone-hero-fullscreen" style="font-family: 'Cormorant Garamond', serif;">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+        
+        #leone-hero-fullscreen {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            min-height: 600px;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2a3f5f 50%, #1e3c72 75%, #2a5298 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #leone-hero-fullscreen .hero-content {
+            position: relative;
+            z-index: 100;
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            padding: 40px 20px;
+        }
+
+        #leone-hero-fullscreen .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease-out;
+            letter-spacing: 1px;
+        }
+
+        #leone-hero-fullscreen .hero-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+            animation: fadeInUp 1s ease-out 0.3s both;
+            letter-spacing: 0.5px;
+        }
+
+        #leone-hero-fullscreen .hero-cta {
+            display: inline-block;
+            padding: 20px 40px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 35px;
+            border: 2px solid rgba(255,255,255,0.4);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+            animation: fadeInUp 1s ease-out 0.6s both;
+            letter-spacing: 0.8px;
+        }
+
+        #leone-hero-fullscreen .hero-cta:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        #leone-hero-fullscreen .sphere {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2a3f5f 75%, #1e3c72 100%);
+            cursor: grab;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 15px 50px rgba(15, 20, 25, 0.7), inset 0 3px 12px rgba(255,255,255,0.1);
+            user-select: none;
+            z-index: 50;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255,255,255,0.15);
+        }
+
+        #leone-hero-fullscreen .sphere:hover {
+            transform: scale(1.1);
+            box-shadow: 0 18px 60px rgba(15, 20, 25, 0.8), inset 0 4px 16px rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.25);
+        }
+
+        #leone-hero-fullscreen .sphere:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+
+        #leone-hero-fullscreen .sphere.dragging {
+            z-index: 200;
+            transform: scale(1.15);
+            box-shadow: 0 25px 70px rgba(15, 20, 25, 0.9), inset 0 5px 20px rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        /* Tre dimensioni diverse per le sfere */
+        #leone-hero-fullscreen .sphere.large {
+            width: 120px;
+            height: 120px;
+        }
+
+        #leone-hero-fullscreen .sphere.medium {
+            width: 90px;
+            height: 90px;
+        }
+
+        #leone-hero-fullscreen .sphere.small {
+            width: 70px;
+            height: 70px;
+        }
+
+        /* Effetto glow interno */
+        #leone-hero-fullscreen .sphere::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 25%;
+            width: 35%;
+            height: 35%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%);
+            border-radius: 50%;
+            filter: blur(8px);
+        }
+
+        /* Animazioni di entrata */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes sphereFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Animazione di floating per le sfere */
+        #leone-hero-fullscreen .sphere:not(.dragging) {
+            animation: sphereFloat 6s ease-in-out infinite;
+        }
+
+        #leone-hero-fullscreen .sphere:nth-child(2) {
+            animation-delay: -2s;
+        }
+
+        #leone-hero-fullscreen .sphere:nth-child(3) {
+            animation-delay: -4s;
+        }
+
+        /* Controlli in basso */
+        #leone-hero-fullscreen .controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        #leone-hero-fullscreen .reset-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        #leone-hero-fullscreen .reset-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* LMS Head SVG Logo */
+        #leone-hero-fullscreen .lms-head-svg {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            right: 5%;
+            z-index: 75;
+            cursor: move;
+            transition: all 0.3s ease;
+            filter: drop-shadow(3px 3px 12px rgba(0,0,0,0.4));
+            animation: fadeInScale 2s ease-out 1.5s both;
+            user-select: none;
+        }
+
+        #leone-hero-fullscreen .lms-head-svg:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 10px 25px rgba(15, 20, 25, 0.5));
+        }
+
+        #leone-hero-fullscreen .lms-head-svg:active {
+            cursor: grabbing;
+            transform: scale(0.98);
+        }
+
+        #leone-hero-fullscreen .lms-head-svg.dragging {
+            z-index: 200;
+            transform: scale(1.1);
+            filter: drop-shadow(0 15px 35px rgba(15, 20, 25, 0.7));
+        }
+
+        #leone-hero-fullscreen .lms-head-svg svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 6px 20px rgba(15, 20, 25, 0.4));
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 0.9;
+                transform: scale(1);
+            }
+        }
+
+        /* Replica esatta del logo LMS */
+        #leone-hero-fullscreen .lms-head-svg svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 6px 20px rgba(15, 20, 25, 0.4));
+        }
+
+        #leone-hero-fullscreen .lms-head-svg svg path {
+            stroke: none;
+        }
+
+        #leone-hero-fullscreen .lms-head-svg svg .lms-head-path {
+            fill: url(#lmsGradientFullscreen);
+        }
+
+        #leone-hero-fullscreen .lms-head-svg svg .lms-head-path-stroke {
+            stroke: url(#lmsGradientFullscreen);
+            stroke-width: 1.2;
+            fill: none;
+        }
+
+        #leone-hero-fullscreen .lms-head-svg svg .lms-head-ellipse {
+            fill: url(#lmsGradientFullscreen);
+        }
+
+        #leone-hero-fullscreen .lms-head-svg svg .lms-head-diamond {
+            fill: url(#lmsGradientFullscreen);
+            stroke: rgba(255,255,255,0.1);
+            stroke-width: 0.3;
+        }
+
+        /* Responsive per LMS Head SVG */
+        @media (max-width: 768px) {
+            #leone-hero-fullscreen .lms-head-svg {
+                width: 220px;
+                height: 220px;
+                top: 8%;
+                right: 5%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #leone-hero-fullscreen .lms-head-svg {
+                width: 150px;
+                height: 150px;
+                opacity: 0.8;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #leone-hero-fullscreen .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            #leone-hero-fullscreen .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            #leone-hero-fullscreen .sphere.large {
+                width: 80px;
+                height: 80px;
+            }
+            
+            #leone-hero-fullscreen .sphere.medium {
+                width: 60px;
+                height: 60px;
+            }
+            
+            #leone-hero-fullscreen .sphere.small {
+                width: 45px;
+                height: 45px;
+            }
+            
+
+        }
+
+        @media (max-width: 480px) {
+            #leone-hero-fullscreen {
+                height: 100vh;
+                min-height: 500px;
+            }
+            
+            #leone-hero-fullscreen .hero-title {
+                font-size: 2rem;
+            }
+            
+            #leone-hero-fullscreen .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+
+        }
+    </style>
+
+    <!-- Contenuto Hero -->
+    <div class="hero-content">
+        <h1 class="hero-title">Leone Master School</h1>
+        <p class="hero-subtitle">Orientati al Risultato</p>
+        <a href="#" class="hero-cta">Scopri i Nostri Corsi</a>
+    </div>
+
+    <!-- Sfere Interattive -->
+    <div class="sphere large" data-sphere="1"></div>
+    <div class="sphere medium" data-sphere="2"></div>
+    <div class="sphere small" data-sphere="3"></div>
+
+    <!-- LMS Head SVG Logo -->
+    <div class="lms-head-svg" data-element="lms-head">
+        <svg viewBox="0 0 180 150" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="lmsGradientFullscreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#0f1419;stop-opacity:1" />
+                    <stop offset="25%" style="stop-color:#1a2332;stop-opacity:1" />
+                    <stop offset="75%" style="stop-color:#2a3f5f;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#1e3c72;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            
+            <!-- Testa principale (parte superiore) -->
+            <path class="cls-1" d="M11.94,25.15l19.18,3.13v-2.56c-10.09-2.42-20.32-4.12-31.12-3.41V0c3.69.43,7.25,1.14,10.8,1.99,6.11,1.71,12.22,3.69,18.19,6.11,20.04,8.1,36.09,21.74,50.16,37.94,2.84,3.27,5.54,6.82,8.53,10.37.99-1.28,1.85-2.56,2.84-3.69,11.79-15.63,26.43-28.7,43.2-38.79,11.08-6.68,23.02-10.23,35.52-13.07,1.28-.43,2.7-.57,3.98-.85.57,0,1.56.71,1.56,1.14.14,6.82,0,13.78,0,20.89-9.8-.28-19.32-.28-28.7,2.56,0,1.14-.28,2.13.43,2.84.28.28.71.28,1.14.28,4.55-.99,9.09-2.13,13.78-2.84.71-.14,2.13.85,2.27,1.42.14,4.4.14,8.95.14,13.64h-13.36c.99,3.27,1.85,6.25,2.84,9.66.14,1.42.28,2.42.43,3.41-.14,4.55-.14,9.09,1.71,13.36s3.41,8.53,5.12,12.79c.71,2.27-.43,4.69-2.7,5.54-.14,0-.43.14-.57.14-1.42.14-2.98,0-4.83,0,.28,1.28.57,2.42.99,3.69q1.99,4.83-1.99,7.96c0,.85.14,1.56.43,2.27,1.28,2.13.57,3.69-1.14,5.26-1.42.99-1.85,2.84-.99,4.26,3.98,6.68,1.71,11.08-5.12,15.06-.43.14-.71.28-.99.57-6.82,2.27-13.93,1.99-21.31,1.99-.43.71-.57,1.56-.57,2.42-.14,5.97-.28,12.08-.28,18.05,0,1.85-.57,2.27-2.27,2.27-14.92-.14-29.7-.28-44.62-.43-1.28,0-2.42-.28-4.12-.43h-.99c-5.12-1.14-10.23-2.42-15.63-3.69-.99-.28-1.56-.57-2.27-.71-.99-.71-1.85-1.56-2.56-2.42,0-.99-.14-1.56-.14-2.13,0-3.13,0-6.25.14-9.8,0-.57,0-1.14-.14-1.71,0-3.41.57-6.96,0-10.23-.99-5.54-2.42-11.08-4.26-16.48-.99-1.99-2.7-3.69-4.69-4.69-3.69-1.99-6.82-4.97-8.81-8.81-.71-1.14-1.56-2.27-2.56-3.13-2.98-2.56-3.98-5.83-4.83-9.38-1.14-4.55.14-8.95.14-13.36,0-1.99,1.42-3.98,1.85-5.97.57-2.13.71-4.55.43-6.82-.43-2.13,0-4.26,1.14-6.11.43-.71,1.85-1.56,0-1.56l-.99-.14h-1.14l-13.78-.57c0-3.55,0-7.39-.14-11.37.28-1.28.43-2.42.71-3.55Z" 
+                  fill="url(#lmsGradientFullscreen)" stroke="none"/>
+
+        </svg>
+    </div>
+
+    <!-- Controlli -->
+    <div class="controls">
+        <button class="reset-btn" onclick="resetLeoneHeroSpheres()">↻ Ripristina Sfere</button>
+    </div>
+</div>
+
+<script>
+(function() {
+    if (window.LeoneHeroWidget) return;
+    
+    window.LeoneHeroWidget = {
+        init: function() {
+            const container = document.getElementById('leone-hero-fullscreen');
+            const spheres = container.querySelectorAll('.sphere');
+            const lmsHead = container.querySelector('.lms-head-svg');
+            const draggableElements = [...spheres, lmsHead].filter(el => el);
+            let isDragging = false;
+            let currentElement = null;
+            let offset = { x: 0, y: 0 };
+
+            // Posizioni iniziali casuali ma bilanciate
+            function setInitialPositions() {
+                const containerRect = container.getBoundingClientRect();
+                const spherePositions = [
+                    { x: containerRect.width * 0.15, y: containerRect.height * 0.25 },
+                    { x: containerRect.width * 0.75, y: containerRect.height * 0.35 },
+                    { x: containerRect.width * 0.25, y: containerRect.height * 0.75 }
+                ];
+
+                spheres.forEach((sphere, index) => {
+                    const pos = spherePositions[index];
+                    sphere.style.left = pos.x + 'px';
+                    sphere.style.top = pos.y + 'px';
+                });
+                
+                // Posizione iniziale per la testa LMS
+                if (lmsHead) {
+                    const headPos = { x: containerRect.width * 0.75, y: containerRect.height * 0.12 };
+                    lmsHead.style.left = headPos.x + 'px';
+                    lmsHead.style.top = headPos.y + 'px';
+                }
+            }
+
+            function startDrag(e) {
+                e.preventDefault();
+                
+                isDragging = true;
+                currentElement = e.target.closest('.sphere, .lms-head-svg');
+                currentElement.classList.add('dragging');
+                
+                // Ferma l'animazione di floating solo per le sfere
+                if (currentElement.classList.contains('sphere')) {
+                    currentElement.style.animation = 'none';
+                }
+                
+                const rect = currentElement.getBoundingClientRect();
+                const containerRect = container.getBoundingClientRect();
+                
+                const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+                
+                offset.x = clientX - rect.left;
+                offset.y = clientY - rect.top;
+            }
+
+            function drag(e) {
+                if (!isDragging || !currentElement) return;
+                
+                e.preventDefault();
+                
+                const containerRect = container.getBoundingClientRect();
+                const elementSize = currentElement.offsetWidth;
+                
+                const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+                
+                let newX = clientX - containerRect.left - offset.x;
+                let newY = clientY - containerRect.top - offset.y;
+                
+                // Mantieni gli elementi all'interno del viewport
+                newX = Math.max(0, Math.min(newX, containerRect.width - elementSize));
+                newY = Math.max(0, Math.min(newY, containerRect.height - elementSize));
+                
+                currentElement.style.left = newX + 'px';
+                currentElement.style.top = newY + 'px';
+            }
+
+            function endDrag() {
+                if (!isDragging) return;
+                
+                isDragging = false;
+                
+                if (currentElement) {
+                    currentElement.classList.remove('dragging');
+                    
+                    // Riattiva l'animazione di floating solo per le sfere
+                    if (currentElement.classList.contains('sphere')) {
+                        setTimeout(() => {
+                            if (currentElement && !currentElement.classList.contains('dragging')) {
+                                currentElement.style.animation = '';
+                            }
+                        }, 100);
+                    }
+                    
+                    currentElement = null;
+                }
+            }
+
+            // Event listeners per tutti gli elementi draggabili
+            draggableElements.forEach(element => {
+                element.addEventListener('mousedown', startDrag);
+                element.addEventListener('touchstart', startDrag, { passive: false });
+            });
+
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('touchend', endDrag);
+
+            // Imposta posizioni iniziali
+            setInitialPositions();
+
+            // Riposiziona al resize della finestra
+            window.addEventListener('resize', setInitialPositions);
+        }
+    };
+
+    // Funzione globale per reset
+    window.resetLeoneHeroSpheres = function() {
+        const container = document.getElementById('leone-hero-fullscreen');
+        const spheres = container.querySelectorAll('.sphere');
+        const lmsHead = container.querySelector('.lms-head-svg');
+        const containerRect = container.getBoundingClientRect();
+        
+        const spherePositions = [
+            { x: containerRect.width * 0.15, y: containerRect.height * 0.25 },
+            { x: containerRect.width * 0.75, y: containerRect.height * 0.35 },
+            { x: containerRect.width * 0.25, y: containerRect.height * 0.75 }
+        ];
+        
+        spheres.forEach((sphere, index) => {
+            const pos = spherePositions[index];
+            sphere.style.left = pos.x + 'px';
+            sphere.style.top = pos.y + 'px';
+            sphere.style.animation = '';
+        });
+        
+        // Reset posizione testa LMS
+        if (lmsHead) {
+            const headPos = { x: containerRect.width * 0.75, y: containerRect.height * 0.12 };
+            lmsHead.style.left = headPos.x + 'px';
+            lmsHead.style.top = headPos.y + 'px';
+        }
+    };
+
+    // Auto-inizializzazione
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', window.LeoneHeroWidget.init);
+    } else {
+        window.LeoneHeroWidget.init();
+    }
+})();
+</script>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leone Master School - Sfere Interattive</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+        
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #2a3f5f 100%);
+            min-height: 100vh;
+        }
+        
+        .spheres-container {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            margin: 50px auto;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2a3f5f 50%, #1e3c72 75%, #2a5298 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(15, 20, 25, 0.4);
+        }
+
+        .sphere {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 25%, #2a3f5f 75%, #1e3c72 100%);
+            cursor: grab;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 25px rgba(15, 20, 25, 0.5), inset 0 2px 6px rgba(255,255,255,0.1);
+            user-select: none;
+            z-index: 1;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .sphere:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(15, 20, 25, 0.6), inset 0 3px 8px rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .sphere:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+            box-shadow: 0 4px 15px rgba(15, 20, 25, 0.7), inset 0 2px 6px rgba(255,255,255,0.1);
+        }
+
+        .sphere.dragging {
+            z-index: 10;
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(15, 20, 25, 0.8), inset 0 3px 10px rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.25);
+        }
+
+        /* Posizioni iniziali delle sfere */
+        .sphere:nth-child(1) {
+            top: 50px;
+            left: 170px;
+        }
+
+        .sphere:nth-child(2) {
+            top: 120px;
+            left: 120px;
+        }
+
+        .sphere:nth-child(3) {
+            top: 120px;
+            left: 220px;
+        }
+
+        /* Effetto glow per le sfere */
+        .sphere::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 25%;
+            width: 30%;
+            height: 30%;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            filter: blur(3px);
+        }
+
+        .instructions {
+            text-align: center;
+            margin-top: 20px;
+            font-family: 'Cormorant Garamond', serif;
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .spheres-container {
+                width: 90%;
+                height: 250px;
+            }
+            
+            .sphere {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="spheres-container" id="container">
+        <div class="sphere" data-sphere="1"></div>
+        <div class="sphere" data-sphere="2"></div>
+        <div class="sphere" data-sphere="3"></div>
+    </div>
+    
+    <div class="instructions">
+        <p>🎯 Trascina le sfere del logo Leone Master School!</p>
+        <p>Clicca e trascina ogni sfera per spostarla nell'area</p>
+    </div>
+
+    <script>
+        class DraggableSpheres {
+            constructor() {
+                this.container = document.getElementById('container');
+                this.spheres = document.querySelectorAll('.sphere');
+                this.isDragging = false;
+                this.currentSphere = null;
+                this.offset = { x: 0, y: 0 };
+                
+                this.init();
+            }
+
+            init() {
+                this.spheres.forEach(sphere => {
+                    // Mouse events
+                    sphere.addEventListener('mousedown', this.startDrag.bind(this));
+                    
+                    // Touch events per dispositivi mobili
+                    sphere.addEventListener('touchstart', this.startDrag.bind(this), { passive: false });
+                });
+
+                // Global events
+                document.addEventListener('mousemove', this.drag.bind(this));
+                document.addEventListener('mouseup', this.endDrag.bind(this));
+                document.addEventListener('touchmove', this.drag.bind(this), { passive: false });
+                document.addEventListener('touchend', this.endDrag.bind(this));
+            }
+
+            startDrag(e) {
+                e.preventDefault();
+                
+                this.isDragging = true;
+                this.currentSphere = e.target;
+                this.currentSphere.classList.add('dragging');
+                
+                const rect = this.currentSphere.getBoundingClientRect();
+                const containerRect = this.container.getBoundingClientRect();
+                
+                // Calcola l'offset per il mouse/touch
+                const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+                
+                this.offset.x = clientX - rect.left;
+                this.offset.y = clientY - rect.top;
+            }
+
+            drag(e) {
+                if (!this.isDragging || !this.currentSphere) return;
+                
+                e.preventDefault();
+                
+                const containerRect = this.container.getBoundingClientRect();
+                const sphereSize = this.currentSphere.offsetWidth;
+                
+                // Ottieni le coordinate del mouse/touch
+                const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+                
+                // Calcola la nuova posizione
+                let newX = clientX - containerRect.left - this.offset.x;
+                let newY = clientY - containerRect.top - this.offset.y;
+                
+                // Limita la posizione all'interno del container
+                newX = Math.max(0, Math.min(newX, this.container.offsetWidth - sphereSize));
+                newY = Math.max(0, Math.min(newY, this.container.offsetHeight - sphereSize));
+                
+                // Applica la nuova posizione
+                this.currentSphere.style.left = newX + 'px';
+                this.currentSphere.style.top = newY + 'px';
+            }
+
+            endDrag() {
+                if (!this.isDragging) return;
+                
+                this.isDragging = false;
+                
+                if (this.currentSphere) {
+                    this.currentSphere.classList.remove('dragging');
+                    this.currentSphere = null;
+                }
+            }
+        }
+
+        // Inizializza il componente quando il DOM è caricato
+        document.addEventListener('DOMContentLoaded', () => {
+            new DraggableSpheres();
+        });
+
+        // Funzione per resettare le posizioni delle sfere
+        function resetSpheres() {
+            const spheres = document.querySelectorAll('.sphere');
+            const positions = [
+                { top: '50px', left: '170px' },
+                { top: '120px', left: '120px' },
+                { top: '120px', left: '220px' }
+            ];
+            
+            spheres.forEach((sphere, index) => {
+                sphere.style.top = positions[index].top;
+                sphere.style.left = positions[index].left;
+            });
+        }
+
+        // Esponi la funzione reset globalmente per uso esterno
+        window.resetLeoneSpheresPosition = resetSpheres;
+    </script>
+</body>
+</html>
