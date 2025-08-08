@@ -258,9 +258,92 @@
 
         @media (max-width: 480px) {
             .large-text {
-                font-size: clamp(60px, 10vw, 150px);
-                bottom: -10px;
-                left: -20px;
+                font-size: 60vh !important; /* Raddoppiata! Molto più grande */
+                bottom: -20px;
+                left: -60px;
+                line-height: 0.7;
+                letter-spacing: -0.05em;
+            }
+        }
+
+        /* Mobile-only modifications - NON TOCCA DESKTOP */
+        @media (max-width: 768px) {
+            .sphere {
+                width: 80px;  /* Rimpicciolite rispetto a prima */
+                height: 80px;
+                border-width: 3px;
+            }
+
+            .sphere[data-element="sphere1"] {
+                top: 120px;
+                left: 60px;
+            }
+
+            .sphere[data-element="sphere2"] {
+                top: 100px;
+                left: 140px;
+            }
+
+            .sphere[data-element="sphere3"] {
+                top: 100px;
+                left: 220px;
+            }
+
+            /* NASCONDI la testa leone su mobile */
+            #leone-hero-fullscreen .lms-head-svg {
+                display: none !important;
+            }
+
+            /* Scritta grande: un terzo dello schermo */
+            .large-text {
+                font-size: 33vh !important; /* Un terzo dell'altezza viewport */
+                bottom: 0px;
+                left: -40px;
+                line-height: 0.8;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sphere {
+                width: 70px;  /* Ancora più piccole su mobile piccolo */
+                height: 70px;
+                border-width: 3px;
+            }
+
+            .sphere[data-element="sphere1"] {
+                top: 140px;
+                left: 40px;
+            }
+
+            .sphere[data-element="sphere2"] {
+                top: 120px;
+                left: 120px;
+            }
+
+            .sphere[data-element="sphere3"] {
+                top: 250px;
+                left: 80px;
+            }
+
+            /* NASCONDI la testa leone anche su mobile piccolo */
+            #leone-hero-fullscreen .lms-head-svg {
+                display: none !important;
+            }
+
+            /* Scritta ancora più ottimizzata per mobile piccolo */
+            .large-text {
+                font-size: 60vh !important; /* Raddoppiata! Molto più grande */
+                bottom: -20px;
+                left: -60px;
+                line-height: 0.7;
+                letter-spacing: -0.05em;
+            }
+
+            /* CTA spostata più in alto dato che non c'è più la testa */
+            .cta-button {
+                top: 50% !important;
+                padding: 16px 30px;
+                font-size: 15px;
             }
         }
 
